@@ -13,7 +13,7 @@ require 'yaml'
 require 'ostruct'
 
 use Rack::Auth::Basic do |username, password|
-  [username, password] == ['qos', 'immQOS']
+  [username, password] == ['qos', 'QOS']
 end
 
 Dir[File.join(ROOT_DIR, "app", "*")].each { |file| load file }
