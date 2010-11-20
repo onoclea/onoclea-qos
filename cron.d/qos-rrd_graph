@@ -1,0 +1,1 @@
+*/5 * * * * root /srv/qos/bin/rrd-graph.sh > /dev/null

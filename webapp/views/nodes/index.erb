@@ -1,0 +1,29 @@
+<h1>
+ Global 10 minute average
+</h1>
+
+<p>
+ <a href="/nodes/view/all"><img src="/images/rrd/all_10.png" /></a>
+</p>
+
+<p>
+ <h2>
+  Nodes
+ </h2>
+
+ <table cellpadding='5'>
+  <% for node in @nodes %>
+   <tr>
+     <td>
+      <%= node.comment %>
+     </td>
+     <td>
+      <a href="/nodes/view/<%= node.name %>">view</a>
+     </td>
+     <td>
+      <a href="/nodes/edit/<%= node.name %>">edit</a>
+     </td>
+   </tr>
+  <% end %>
+ </table>
+</p>

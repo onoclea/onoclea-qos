@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="description" content="Onoclea QOS" />
+  <meta name="keywords" content="keywords of site" />
+  <meta name="author" content="Paweł J. Sawicki / Onoclea" />
+  <meta http-equiv="refresh" content="300" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />
+  <title>Onoclea QOS</title>
+ </head>
+
+ <body>
+  <div id="container">
+
+   <div id="navbar">
+    <div id="navleft">
+     <h1><a href="/"><img src="/images/onoclea_logo.png" alt="Onoclea logo" /></a></h1>
+    </div>
+    <div id="navright">
+     <ul>
+      <li><a class="active" href="/nodes/index">nodes index</a></li>
+      <li><a class="active" href="/nodes/add">add a new node</a></li>
+     </ul>
+    </div>
+   </div>
+
+   <div id="main">
+    <div id="mainleft">
+     <h2>menu</h2>
+     <div class="leftmenu"><a href="/nodes/index">nodes index</a></div>
+     <div class="leftmenu"><a href="/nodes/add">add a new node</a></div>
+     <h2>admin</h2>
+     <div class="leftmenu"><a href="/admin/verify_reload">apply &amp; reload</a></div>
+    </div>
+
+    <div id="mainright">
+     <% if @message %>
+      <h1 id='message'>
+       <%= @message %>
+      </h1>
+     <% end %>
+     <%= yield %>
+    </div>
+    <div id="bottom"></div>
+   </div>
+   <div id="footer">
+    <div id="footerleft">
+     <p>Copyright &copy; 2010 Onoclea</p>
+    </div>
+    <div id="footerright">
+     <p>Onoclea - <a href="http://onoclea.com/">onoclea.com</a></p>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

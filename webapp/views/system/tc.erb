@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# eth1 - out
+# eth2 - in
+
+for eth in eth1 eth2; do
+  tc qdisc del dev $eth root
+  tc qdisc add dev $eth root handle 1: htb default 10
+
+  tc class add dev $eth parent 1: classid 1:1 htb rate <%= @rate_max %> ceil <%= @rate_max %>
+  tc class add dev $eth parent 1:1 classid 1:10 htb rate <%= @rate_max %> ceil <%= @rate_max %> prio 1
+
+  tc qdisc add dev $eth parent 1:10 handle 10: sfq perturb 10
+  
+  <% for node in @nodes %>
+  <% if node.id != 0 %>
+  # <%= node.name %>
+
+  tc class add dev $eth parent 1:1 classid 1:<%= node.flow_id %> htb rate <%= node.limit.rate %> ceil <%= node.limit.ceil %> prio 2
+
+  tc qdisc add dev $eth parent 1:<%= node.flow_id %> handle <%= node.flow_id %>: sfq perturb 10
+
+  tc filter add dev $eth protocol ip parent 1: prio 2 handle <%= node.mark_in %> fw flowid 1:<%= node.flow_id %>
+  tc filter add dev $eth protocol ip parent 1: prio 2 handle <%= node.mark_out %> fw flowid 1:<%= node.flow_id %>
+  <% end %>
+  <% end %>
+done

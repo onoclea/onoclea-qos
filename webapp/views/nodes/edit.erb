@@ -1,0 +1,57 @@
+<h2>
+ Editing an existing node
+</h2>
+
+<p>
+<form action='' method='POST'>
+ <table cellpadding='5'>
+  <tr>
+    <td>
+      <label for='name'>Node name</label>
+    </td>
+    <td>
+      <input name='name' type='text' value='<%= @node.name %>' disabled readonly/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for='comment'>Node comment</label>
+    </td>
+    <td>
+      <input name='comment' type='text' value='<%= @node.comment %>' />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for='rate'>Soft limit</label>
+    </td>
+    <td>
+      <input name='rate' type='text' value='<%= @node.limit.rate %>' />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for='ceil'>Hard limit</label>
+    </td>
+    <td>
+      <input name='ceil' type='text' value='<%= @node.limit.ceil %>' />
+    </td>
+  </tr>
+  </tr>
+  <tr>
+    <td>
+      <label for='cidrs'>CIDRs</label>
+    </td>
+    <td>
+      <textarea name='cidrs' rows='10' columns='68'><% for cidr in @cidrs %>
+<%= cidr.cidr %><% end %></textarea>
+    </td>
+  </tr>
+  <tr>
+    <td colspan='2'>
+      <input type='submit' value='Save' />
+    </td>
+  </tr>
+ </table>
+</form>
+</p>

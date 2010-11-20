@@ -1,0 +1,27 @@
+#!/bin/bash
+
+/usr/bin/rrdtool create <%= @rrd_dir_path %>/<%= @node.name %>.rrd --step 60 \
+		DS:<%= @node.name %>_in:COUNTER:600:0:U \
+		DS:<%= @node.name %>_out:COUNTER:600:0:U \
+		RRA:AVERAGE:0.5:1:43200 \
+		RRA:AVERAGE:0.5:2:43200 \
+		RRA:AVERAGE:0.5:5:25920 \
+		RRA:AVERAGE:0.5:10:25920 \
+		RRA:AVERAGE:0.5:30:12960 \
+		RRA:AVERAGE:0.5:60:8640 \
+		RRA:AVERAGE:0.5:1440:720
+
+#	# 1 minute average for 30 days
+#	RRA:AVERAGE:0.5:1:43200 \
+#	# 2 minute average for 60 days
+#	RRA:AVERAGE:0.5:2:43200 \
+#	# 5 minute average for 3 months
+#	RRA:AVERAGE:0.5:5:25920 \
+#	# 10 minute average for 6 months
+#	RRA:AVERAGE:0.5:10:25920 \
+#	# 30 minute average for 9 months
+#	RRA:AVERAGE:0.5:30:12960 \
+#	# 1 hour average for 12 months
+#	RRA:AVERAGE:0.5:60:8640 \
+#	# 1 day average for 2 years
+#	RRA:AVERAGE:0.5:1440:720

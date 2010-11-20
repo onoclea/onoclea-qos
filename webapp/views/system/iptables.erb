@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# get old counter values
+packets_in=$(/sbin/iptables -vnx -t mangle -L "<%= @node.name %>_in" 2>&1 | /usr/bin/tail -n 1 | /usr/bin/awk '{ print $1; }' | egrep '[[:digit:]]+')
+bytes_in=$(/sbin/iptables -vnx -t mangle -L "<%= @node.name %>_in" 2>&1 | /usr/bin/tail -n 1 | /usr/bin/awk '{ print $2; }' | egrep '[[:digit:]]+')
+
+packets_out=$(/sbin/iptables -vnx -t mangle -L "<%= @node.name %>_out" 2>&1 | /usr/bin/tail -n 1 | /usr/bin/awk '{ print $1; }' | egrep '[[:digit:]]+')
+bytes_out=$(/sbin/iptables -vnx -t mangle -L "<%= @node.name %>_out" 2>&1 | /usr/bin/tail -n 1 | /usr/bin/awk '{ print $2; }' | egrep '[[:digit:]]+')
+
+# check if chains are already present
+if [ -n "${packets_in}" -a -n "${bytes_in}" -a -n "${packets_out}" -a -n "${bytes_out}" ]; then
+	# delete all references
+	for rule_no in $(/sbin/iptables -t mangle -L FORWARD -nvx --line-numbers | /bin/egrep '<%= @node.name %>_(in|out)' | /usr/bin/cut -d" " -f1 | /usr/bin/sort -nr); do
+		 /sbin/iptables -t mangle --delete FORWARD "${rule_no}"
+	done
+
+	# delete the chains
+	iptables -t mangle --flush <%= @node.name %>_in
+	iptables -t mangle --delete-chain <%= @node.name %>_in
+	iptables -t mangle --flush <%= @node.name %>_out
+	iptables -t mangle --delete-chain <%= @node.name %>_out
+
+	# save old couner values for future use
+	op_set_counters_in="--set-counters ${packets_in} ${bytes_in}"
+	op_set_counters_out="--set-counters ${packets_out} ${bytes_out}"
+fi
+
+# create counting chains - in
+iptables -t mangle --new-chain <%= @node.name %>_in
+iptables -t mangle --append <%= @node.name %>_in --jump MARK --set-mark <%= @mark_in %> ${op_set_counters_in}
+
+# create counting chains - out
+iptables -t mangle --new-chain <%= @node.name %>_out
+iptables -t mangle --append <%= @node.name %>_out --jump MARK --set-mark <%= @mark_out %> ${op_set_counters_out}
+
+# set specific matching rules - in/out
+<% for cidr in @cidrs %>
+iptables -t mangle --append FORWARD --source <%= cidr.cidr %> --jump <%= @node.name %>_out
+iptables -t mangle --append FORWARD --destination <%= cidr.cidr %> --jump <%= @node.name %>_in
+<% end %>

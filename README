@@ -1,0 +1,5 @@
+Copyright (c) 2010 Paweł J. Sawicki <pjs@pjs.name>
+
+Onoclea QOS
+
+Web application (written in Ruby Sinatra) used to administer and report current bandwidth utilization for managed nodes.

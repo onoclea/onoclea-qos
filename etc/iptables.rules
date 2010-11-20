@@ -1,0 +1,22 @@
+*filter
+
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+:FW-INPUT - [0:0]
+:FW-OUTPUT - [0:0]
+:FW-FORWARD - [0:0]
+
+-A INPUT -j FW-INPUT
+-A FORWARD -j FW-FORWARD
+-A OUTPUT -j FW-OUTPUT
+
+-A FW-INPUT -i br+ -j ACCEPT 
+
+-A FW-INPUT -p icmp --icmp-type any -j ACCEPT
+-A FW-INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A FW-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A FW-INPUT -j REJECT --reject-with icmp-host-prohibited
+
+COMMIT

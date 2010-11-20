@@ -1,0 +1,12 @@
+client_1:
+ description: Client 1
+ cidr: 10.1.0.0/24
+ soft_limit: 1mbps
+ hard_limit: 1mbps
+
+client_2:
+ description: Client 2
+ cidr: 10.2.0.0/24
+ cidr: 192.168.0.0/24
+ hard_limit: 0.5mbps
+ soft_limit: 32mbps
